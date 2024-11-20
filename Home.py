@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 import streamlit as st
 import textwrap
 import requests
@@ -26,7 +25,7 @@ with st.sidebar:
         st.sidebar.error(f"Error loading animation: {e}")
 
 # Load environment variables from .env file
-load_dotenv()
+# load_dotenv()
 
 # Set up Groq API client
 # groq_api_key = os.getenv("GROQ_API_KEY")
@@ -44,6 +43,7 @@ if "chat" not in st.session_state:
                     "Please respond with possible conditions and appropriate medical advice."
                     "Additionally, if the symptoms indicate a serious condition, suggest that the user see a doctor. "
                     "Use simple language and try to be interactive"
+                    "Do not answer anyother questions apart from these"
                 ),
             }
         ],
