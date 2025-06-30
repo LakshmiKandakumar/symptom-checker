@@ -4,6 +4,10 @@ import textwrap
 import requests
 from groq import Groq
 from streamlit_lottie import st_lottie
+from dotenv import load_dotenv  # ✅ Import dotenv
+
+# ✅ Load the .env file
+load_dotenv()
 
 st.set_page_config(page_title="Symptom Checker", page_icon="👨‍⚕️")
 
@@ -24,12 +28,9 @@ with st.sidebar:
     except Exception as e:
         st.sidebar.error(f"Error loading animation: {e}")
 
-# Load environment variables from .env file
-# load_dotenv()
-
-# Set up Groq API client
-# groq_api_key = os.getenv("GROQ_API_KEY")
-groq_client = Groq(api_key="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")
+# ✅ Use API key from .env
+groq_api_key = os.getenv("GROQ_API_KEY")
+groq_client = Groq(api_key=groq_api_key)
 
 if "chat" not in st.session_state:
     st.session_state.chat = groq_client.chat.completions.create(
@@ -43,7 +44,7 @@ if "chat" not in st.session_state:
                     "Please respond with possible conditions and appropriate medical advice."
                     "Additionally, if the symptoms indicate a serious condition, suggest that the user see a doctor. "
                     "Use simple language and try to be interactive"
-                    "Do not answer anyother questions apart from these"
+                    "Do not answer any other questions apart from these."
                 ),
             }
         ],
@@ -71,11 +72,9 @@ if prompt := st.chat_input("How are you today?"):
             ],
             model="llama3-70b-8192"
         )
-        # Display last LLM response, first converting it to Markdown format
         with st.chat_message("assistant", avatar="👨‍⚕️"):
             st.markdown(response.choices[0].message.content)
         st.session_state.messages.append({"role": "assistant", "content": response.choices[0].message.content})
     except Exception as e:
         with st.chat_message("assistant", avatar="👨‍⚕️"):
             st.markdown("I can't help you with that.")
-
